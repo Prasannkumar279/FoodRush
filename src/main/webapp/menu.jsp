@@ -1,0 +1,566 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+    
+    <%@ page import="java.util.List" %>
+    <%@ page import="com.tap.model.Menu" %>
+    <%@ page import="com.tap.model.restaurant" %>
+    
+    
+<%
+restaurant restaurant = (restaurant) request.getAttribute("restaurant");
+%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FoodRush | Olive's Cafe</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-body: #050505;
+            --bg-panel: #111111;
+            --bg-card: #151515;
+            --primary-red: #ea3333;
+            --primary-hover: #ff4747;
+            --text-main: #ffffff;
+            --text-muted: #888888;
+            --text-light-muted: #b3b3b3;
+            --border-color: #222222;
+            --veg: #22c55e;
+            --nonveg: #ef4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-main);
+        }
+
+        /* ================= NAVBAR ================= */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 40px;
+            background-color: var(--bg-body);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--text-main);
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            color: #f97316; /* Orange brand icon */
+        }
+
+        .location {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--text-light-muted);
+            font-size: 0.9rem;
+            border-left: 1px solid var(--border-color);
+            padding-left: 30px;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-main);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .btn-cart {
+            background-color: var(--primary-red);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .cart-badge {
+            background: white;
+            color: var(--primary-red);
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 0.75rem;
+        }
+
+        /* ================= RESTAURANT HEADER ================= */
+        .restaurant-banner {
+            margin: 20px 40px;
+            border-radius: 16px;
+            background: linear-gradient(rgba(17, 17, 17, 0.85), rgba(17, 17, 17, 0.95)), url('https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1200&q=80') center/cover;
+            padding: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border: 1px solid var(--border-color);
+        }
+
+        .banner-content {
+            display: flex;
+            gap: 25px;
+            align-items: center;
+        }
+
+        .restaurant-logo {
+            width: 120px;
+            height: 120px;
+             min-width: 120px;
+            max-width: 120px;
+            flex-shrink: 0;
+            border-radius: 12px;
+            object-fit: cover;
+            border: 2px solid rgba(255,255,255,0.1);
+        }
+
+        .restaurant-info h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .restaurant-meta {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 0.95rem;
+            color: var(--text-light-muted);
+            margin-bottom: 10px;
+        }
+
+        .rating {
+            color: white;
+            font-weight: 600;
+        }
+
+        .rating span {
+            color: #facc15; /* Star color */
+        }
+
+        .cuisines {
+            color: var(--text-muted);
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+        }
+
+		        .offer-tag{
+				    margin-top:12px;
+				    color:#ff8a80;
+				    font-size:18px;
+				    font-weight:600;
+		}
+
+        .btn-heart {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border-color);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        /* ================= MAIN LAYOUT ================= */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 240px 1fr;
+            gap: 30px;
+            padding: 0 40px 60px; /* Added bottom padding here */
+        }
+
+        /* ================= SIDEBAR ================= */
+        .sidebar {
+            background-color: var(--bg-panel);
+            border-radius: 16px;
+            padding: 15px 0;
+            border: 1px solid var(--border-color);
+            height: fit-content;
+        }
+
+        .sidebar-item {
+            padding: 14px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-light-muted);
+            text-decoration: none;
+            font-weight: 500;
+            transition: 0.2s;
+            margin: 0 10px;
+            border-radius: 8px;
+        }
+
+        .sidebar-item:hover {
+            color: var(--text-main);
+            background: rgba(255,255,255,0.05);
+        }
+
+        .sidebar-item.active {
+            background: linear-gradient(90deg, var(--primary-red), #b91c1c);
+            color: white;
+        }
+
+        /* ================= MENU AREA ================= */
+        .menu-controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .search-bar {
+            flex: 1;
+            background-color: var(--bg-panel);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .search-bar input {
+            background: transparent;
+            border: none;
+            color: white;
+            width: 100%;
+            outline: none;
+            font-size: 0.95rem;
+        }
+
+        .btn-filter {
+            background-color: var(--bg-panel);
+            border: 1px solid var(--border-color);
+            color: white;
+            padding: 0 20px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        /* ================= MENU CARD ================= */
+        .menu-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            gap: 16px;
+            transition: 0.2s ease;
+        }
+
+        .menu-card:hover {
+            border-color: #333;
+            background-color: #1a1a1a;
+        }
+
+        .card-img {
+            width: 110px;
+            height: 110px;
+            border-radius: 10px;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        .card-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .item-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .diet-icon {
+            width: 14px;
+            height: 14px;
+            border: 1px solid;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 3px;
+        }
+        .veg { border-color: var(--veg); }
+        .veg::after { content: ''; width: 6px; height: 6px; background: var(--veg); border-radius: 50%; }
+        .non-veg { border-color: var(--nonveg); }
+        .non-veg::after { content: ''; width: 6px; height: 6px; background: var(--nonveg); border-radius: 50%; }
+
+        .item-desc {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+            margin-bottom: 12px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .price-row {
+            margin-top: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .price {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #f97316;
+        }
+
+        .btn-add-item {
+            background-color: var(--primary-red);
+            color: white;
+            border: none;
+            padding: 6px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        /* Right Attributes Sidebar (Per Image) */
+        .card-attributes {
+            width: 130px;
+            border-left: 1px solid var(--border-color);
+            padding-left: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .attr-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+        }
+
+        .attr-label { color: var(--text-muted); }
+        .attr-value { color: var(--text-main); font-weight: 500; text-align: right;}
+        
+        .attr-value.available {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            color: var(--text-main);
+        }
+        .attr-value.available::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background: var(--veg);
+            border-radius: 50%;
+        }
+
+        /* SVG Utility */
+        svg { width: 20px; height: 20px; fill: currentColor; }
+
+        @media (max-width: 1100px) {
+            .menu-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <a href="#" class="logo">
+                <svg class="logo-icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+                FoodRush
+            </a>
+            <div class="location">
+                <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                BTM Layout, Bangalore ⌄
+            </div>
+        </div>
+        <div class="nav-right">
+            <a href="#" class="nav-item"><svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg> Search</a>
+            <a href="#" class="nav-item"><svg viewBox="0 0 24 24"><path d="M11 11h-1v-1h1v1zm2 0h-1v-1h1v1zm2 0h-1v-1h1v1zm-4-4h-1v-1h1v1zm2 0h-1v-1h1v1zm2 0h-1v-1h1v1zM20 2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 18H4V4h16v16z"/></svg> Offers</a>
+            <a href="RestaurantServlet" class="nav-item"><svg viewBox="0 0 24 24"><path d="M4 10V8l2-5h12l2 5v2c0 1.1-.9 2-2 2v8H6v-8c-1.1 0-2-.9-2-2zm2-5-1 3h14l-1-3H6zm2 7v6h8v-6H8zm8-2c.55 0 1-.45 1-1s-.45-1-1-1-1 .45-1 1 .45 1 1 1z"/></svg> Resaturants</a>
+            <button type="button" class="btn-cart"    onclick="window.location.href='<%= request.getContextPath() %>/cart.jsp'">
+                  
+                <svg viewBox="0 0 24 24" fill="white"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-"/></svg>
+              Cart <span class="cart-badge"></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- RESTAURANT BANNER -->
+<header class="restaurant-banner">
+
+    <div class="banner-content">
+
+        <img
+            class="restaurant-logo"
+            src="ImageServlet?id=<%= restaurant.getRestaurantID() %>"
+            alt="<%= restaurant.getRestName() %>">
+
+        <div class="restaurant-info">
+
+            <h1><%= restaurant.getRestName() %></h1>
+		
+		    <div class="restaurant-meta">
+		        <span class="rating">★ <%= restaurant.getRating() %></span>
+		
+		        <span><%= restaurant.getDeliveryTime() %> Minutes</span>
+		
+		        <span>₹250 for two</span>
+		    </div>
+         
+
+            <p class="cuisines">
+                <%= restaurant.getCuisineType() %>
+            </p>
+            
+                <p class="offer-tag">
+                 40% OFF upto ₹120 | Use code FOODRUSH40
+               </p>
+            
+            
+
+        </div>
+
+    </div>
+
+</header>
+
+    <!-- MAIN LAYOUT -->
+    <main class="main-layout">
+        
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <a href="#" class="sidebar-item active">⊞ All Items</a>
+            <a href="#" class="sidebar-item">🔥 Best Sellers</a>
+            <a href="#" class="sidebar-item">🍢 Starters</a>
+            <a href="#" class="sidebar-item">🍲 Main Course</a>
+            <a href="#" class="sidebar-item">🥘 Biryani</a>
+            <a href="#" class="sidebar-item">🍕 Pizza</a>
+            <a href="#" class="sidebar-item">🍜 Noodles</a>
+            <a href="#" class="sidebar-item">🍰 Desserts</a>
+            <a href="#" class="sidebar-item">🥤 Drinks</a>
+        </aside>
+
+        <!-- MENU AREA -->
+        <section class="menu-section">
+            <div class="menu-controls">
+                <div class="search-bar">
+                    <svg viewBox="0 0 24 24" fill="var(--text-muted)"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                    <input type="text" placeholder="Search for dishes...">
+                </div>
+                <button class="btn-filter">
+                    <svg viewBox="0 0 24 24"><path d="M10 18h4v-2h-4v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z"/></svg> Filter ⌄
+                </button>
+            </div>
+
+            <div class="menu-grid">
+            
+            <%
+            List<Menu> MenuList = (List<Menu>)request.getAttribute("allMenu");
+    		for (Menu m: MenuList) {
+    			
+    			
+    	    %>	
+    	    
+                <!-- CARD 1 -->
+                <div class="menu-card">
+                    <img src="<%= m.getImagePath() %>"
+                        alt="<%= m.getItemName() %>"
+						     class="card-img">
+                    <div class="card-content">
+                        <h3 class="item-title"><span class="diet-icon veg"></span> <%= m.getItemName() %></h3>
+                        <p class="item-desc"><%=m.getDescription() %></p>
+                        <div class="price-row">
+                            <span class="price"><%=m.getPrice() %></span>
+                            
+                            <form action="callCartServlet">
+                            
+                            <input type = "hidden" name = "menuID" value ="<%=m.getMenuID() %>">
+                            <input type = "hidden" name = "quantity" value="1">
+                            <input type = "hidden" name = "restaurantID" value="<%=m.getRestaurantID() %>">
+                            <input type = "hidden" name = "action" value="add">
+                            
+                            <button class="btn-add-item">Add to cart </button>
+                         </form>   
+                        </div>
+                    </div>
+                    <div class="card-attributes">
+                        <div class="attr-row"><span class="attr-label">Menu ID</span><span class="attr-value"><%= m.getMenuID() %></span></div>
+                        <div class="attr-row"><span class="attr-label">Restaurant ID</span><span class="attr-value"><%= m.getRestaurantID() %></span></div>
+                        <div class="attr-row"><span class="attr-label">Category</span><span class="attr-value"><%=m.getCategory() %></span></div>
+                        <div class="attr-row"><span class="attr-label">Available</span><span class="attr-value available"><%= m.isAvailable() ? "Yes" : "No" %></span></div>
+                    </div>
+                </div>
+               	<%  
+	
+	               }
+		
+                 %> 
+                
+                </div>
+
+       
+        </section>
+    </main>
+
+</body>
+</html>

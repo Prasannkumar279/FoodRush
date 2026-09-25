@@ -1,0 +1,372 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FoodRush - Modern Registry</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: "Poppins", sans-serif;
+        background-color: #0d0d0d;
+        color: #ffffff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        padding: 20px;
+      }
+
+      .container {
+        background-color: #121212;
+        border-radius: 20px;
+        box-shadow:
+          0 15px 50px rgba(0, 255, 170, 0.1),
+          0 15px 50px rgba(255, 0, 100, 0.1);
+        display: flex;
+        max-width: 1000px;
+        width: 100%;
+        overflow: hidden;
+        position: relative;
+      }
+
+      /* Subtle glowing edge for the entire container */
+      .container::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        border-radius: 20px;
+        border: 2px solid transparent;
+        background: linear-gradient(135deg, #0ff, #f0f, #ff0) border-box;
+        -webkit-mask:
+          linear-gradient(#fff 0 0) padding-box,
+          linear-gradient(#fff 0 0);
+        -webkit-mask-composite: destination-out;
+        mask-composite: exclude;
+        pointer-events: none;
+        opacity: 0.3;
+      }
+
+      /* Left Side - Premium Restaurant Photo */
+      .image-section {
+        flex: 1.1;
+        position: relative;
+        display: none;
+      }
+
+      .image-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(
+          to top,
+          rgba(0, 0, 0, 0.9),
+          rgba(0, 0, 0, 0.2)
+        );
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        padding: 50px;
+        color: #ffffff;
+        z-index: 2;
+      }
+
+      .image-section img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        position: absolute;
+        z-index: 1;
+      }
+
+      .image-overlay h2 {
+        font-size: 36px;
+        font-weight: 700;
+        margin-bottom: 10px;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+        color: #ffffff;
+      }
+
+      .image-overlay p {
+        font-size: 14px;
+        font-weight: 300;
+        opacity: 0.9;
+        line-height: 1.6;
+      }
+
+      /* Right Side - Mixed Color Form */
+      .form-section {
+        flex: 1;
+        padding: 60px 50px;
+        background-color: #121212;
+        z-index: 3;
+      }
+
+      .form-header {
+        margin-bottom: 40px;
+      }
+
+      .form-header h3 {
+        font-size: 28px;
+        color: #ffffff;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      .form-header p {
+        color: #b0b0b0;
+        font-size: 14px;
+        margin-top: 5px;
+      }
+
+      .form-group {
+        margin-bottom: 25px;
+      }
+
+      label {
+        display: block;
+        font-size: 13px;
+        font-weight: 500;
+        color: #b0b0b0;
+        margin-bottom: 10px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      /* Base Input Styling */
+      input,
+      select,
+      textarea {
+        width: 100%;
+        padding: 14px 18px;
+        border: 2px solid #333;
+        border-radius: 10px;
+        font-family: "Poppins", sans-serif;
+        font-size: 15px;
+        color: #ffffff;
+        background-color: #1e1e1e;
+        transition: all 0.3s ease;
+      }
+
+      textarea {
+        resize: vertical;
+        min-height: 80px;
+      }
+
+      /* The "Mixed Color" Focus Effects */
+      input:focus,
+      select:focus,
+      textarea:focus {
+        outline: none;
+        background-color: #121212;
+      }
+
+      /* Color 1: Teal (Username) */
+      #userName:focus {
+        border-color: #0ff;
+        box-shadow: 0 0 15px rgba(0, 255, 255, 0.4);
+      }
+
+      /* Color 2: Magenta (Password) */
+      #password:focus {
+        border-color: #f0f;
+        box-shadow: 0 0 15px rgba(255, 0, 255, 0.4);
+      }
+
+      /* Color 3: Gold (Email) */
+      #email:focus {
+        border-color: #ff0;
+        box-shadow: 0 0 15px rgba(255, 255, 0, 0.4);
+      }
+
+      /* Color 4: Cyan (Address) */
+      #address:focus {
+        border-color: #0ee;
+        box-shadow: 0 0 15px rgba(0, 238, 238, 0.4);
+      }
+
+      /* Color 5: Purple (Role) */
+      #role:focus {
+        border-color: #8a2be2;
+        box-shadow: 0 0 15px rgba(138, 43, 226, 0.4);
+      }
+
+      /* Custom Select Styling */
+      select {
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1.5 1.5L6 6L10.5 1.5' stroke='%23b0b0b0' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 18px center;
+        cursor: pointer;
+      }
+
+      .btn-submit {
+        width: 100%;
+        background: linear-gradient(135deg, #0ff, #f0f, #ff0);
+        background-size: 300% 300%;
+        color: #121212;
+        border: none;
+        border-radius: 10px;
+        padding: 16px;
+        font-size: 16px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-top: 15px;
+        font-family: "Poppins", sans-serif;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        animation: gradientShift 6s infinite;
+      }
+
+      @keyframes gradientShift {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      .btn-submit:hover {
+        box-shadow:
+          0 0 20px rgba(0, 255, 255, 0.4),
+          0 0 20px rgba(255, 0, 100, 0.4);
+        transform: scale(1.02);
+      }
+
+      .btn-submit:active {
+        transform: scale(0.98);
+      }
+
+      ::placeholder {
+        color: #666;
+      }
+
+      /* Responsive Design */
+      @media (min-width: 800px) {
+        .image-section {
+          display: block;
+        }
+      }
+
+      @media (max-width: 600px) {
+        .form-section {
+          padding: 40px 30px;
+        }
+        .form-header h3 {
+          font-size: 22px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Left Side Image -->
+      <div class="image-section">
+        <img
+          src="https://images.unsplash.com/photo-1617347454431-f49d7ff5c3b1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+          alt="Premium Restaurant Interior"
+        />
+        <div class="image-overlay">
+          <h2>FOODRUSH</h2>
+          <p>
+            "Cravings delivered right to your door. Create an account to unlock
+            fast checkout, live order tracking, and special local offers."
+          </p>
+        </div>
+      </div>
+
+      <!-- Right Side Form -->
+      <div class="form-section">
+        <div class="form-header">
+          <h3>CREATE YOUR ACCOUNT</h3>
+          <p>Welcome to a world of exceptional taste.</p>
+        </div>
+
+        <form action="register" method="POST">
+          <!-- Hidden fields for backend model mapping -->
+          <input type="hidden" name="userId" value="0" />
+          <input type="hidden" name="createdDate" value="" />
+          <input type="hidden" name="lastLoginDate" value="" />
+
+          <div class="form-group">
+            <label for="userName">USER NAME</label>
+            <!-- name="userName" maps to private String userName; -->
+            <input
+              type="text"
+              id="userName"
+              name="userName"
+              required
+              placeholder="User Name"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="password">Password</label>
+            <!-- name="password" maps to private String password; -->
+            <input
+              type="password"
+              id="password"
+              name="password"
+              required
+              placeholder="Password"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="email">EMAIL</label>
+            <!-- name="email" maps to private String email; -->
+            <input
+              type="email"
+              id="email"
+              name="email"
+              required
+              placeholder="Email"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="address">Address</label>
+            <!-- name="address" maps to private String address; -->
+            <textarea
+              id="address"
+              name="address"
+              required
+              placeholder="Address"
+            ></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="role">DESIGNATION</label>
+            <!-- name="role" maps to private String role; -->
+            <select id="role" name="role" required>
+              <option value="" disabled selected>Select your role</option>
+              <option value="customer">customer</option>
+              <option value="admin">admin</option>
+            </select>
+          </div>
+
+          <button type="submit" class="btn-submit">CONFIRM REGISTRATION</button>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

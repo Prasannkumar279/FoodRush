@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FoodRush - Login</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: "Poppins", sans-serif;
+        background-color: #0d0d0d;
+        color: #ffffff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        padding: 20px;
+      }
+
+      .container {
+        background-color: #121212;
+        border-radius: 20px;
+        box-shadow:
+          0 15px 50px rgba(0, 255, 170, 0.1),
+          0 15px 50px rgba(255, 0, 100, 0.1);
+        display: flex;
+        max-width: 1000px;
+        width: 100%;
+        overflow: hidden;
+        position: relative;
+      }
+
+      /* Subtle glowing edge for the entire container */
+      .container::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        border-radius: 20px;
+        border: 2px solid transparent;
+        background: linear-gradient(135deg, #0ff, #f0f, #ff0) border-box;
+        -webkit-mask:
+          linear-gradient(#fff 0 0) padding-box,
+          linear-gradient(#fff 0 0);
+        -webkit-mask-composite: destination-out;
+        mask-composite: exclude;
+        pointer-events: none;
+        opacity: 0.3;
+      }
+
+      /* Left Side - Premium Restaurant Photo */
+      .image-section {
+        flex: 1.1;
+        position: relative;
+        display: none;
+      }
+
+      .image-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(
+          to top,
+          rgba(0, 0, 0, 0.9),
+          rgba(0, 0, 0, 0.2)
+        );
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        padding: 50px;
+        color: #ffffff;
+        z-index: 2;
+      }
+
+      .image-section img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        position: absolute;
+        z-index: 1;
+      }
+
+      .image-overlay h2 {
+        font-size: 36px;
+        font-weight: 700;
+        margin-bottom: 10px;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+        color: #ffffff;
+      }
+
+      .image-overlay p {
+        font-size: 14px;
+        font-weight: 300;
+        opacity: 0.9;
+        line-height: 1.6;
+      }
+
+      /* Right Side - Form */
+      .form-section {
+        flex: 1;
+        padding: 60px 50px;
+        background-color: #121212;
+        z-index: 3;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      .form-header {
+        margin-bottom: 40px;
+      }
+
+      .form-header h3 {
+        font-size: 28px;
+        color: #ffffff;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      .form-header p {
+        color: #b0b0b0;
+        font-size: 14px;
+        margin-top: 5px;
+      }
+
+      .form-group {
+        margin-bottom: 25px;
+      }
+
+      label {
+        display: block;
+        font-size: 13px;
+        font-weight: 500;
+        color: #b0b0b0;
+        margin-bottom: 10px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      /* Base Input Styling */
+      input {
+        width: 100%;
+        padding: 14px 18px;
+        border: 2px solid #333;
+        border-radius: 10px;
+        font-family: "Poppins", sans-serif;
+        font-size: 15px;
+        color: #ffffff;
+        background-color: #1e1e1e;
+        transition: all 0.3s ease;
+      }
+
+      /* Focus Effects */
+      input:focus {
+        outline: none;
+        background-color: #121212;
+      }
+
+      /* Color 1: Teal (Username) */
+      #userName:focus {
+        border-color: #0ff;
+        box-shadow: 0 0 15px rgba(0, 255, 255, 0.4);
+      }
+
+      /* Color 2: Magenta (Password) */
+      #password:focus {
+        border-color: #f0f;
+        box-shadow: 0 0 15px rgba(255, 0, 255, 0.4);
+      }
+
+      .btn-submit {
+        width: 100%;
+        background: linear-gradient(135deg, #0ff, #f0f, #ff0);
+        background-size: 300% 300%;
+        color: #121212;
+        border: none;
+        border-radius: 10px;
+        padding: 16px;
+        font-size: 16px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-top: 15px;
+        font-family: "Poppins", sans-serif;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        animation: gradientShift 6s infinite;
+      }
+
+      @keyframes gradientShift {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      .btn-submit:hover {
+        box-shadow:
+          0 0 20px rgba(0, 255, 255, 0.4),
+          0 0 20px rgba(255, 0, 100, 0.4);
+        transform: scale(1.02);
+      }
+
+      .btn-submit:active {
+        transform: scale(0.98);
+      }
+
+      ::placeholder {
+        color: #666;
+      }
+
+      .register-link {
+        margin-top: 25px;
+        text-align: center;
+        font-size: 14px;
+        color: #b0b0b0;
+      }
+
+      .register-link a {
+        color: #0ff;
+        text-decoration: none;
+        font-weight: 600;
+        transition: color 0.3s ease;
+      }
+
+      .register-link a:hover {
+        color: #f0f;
+        text-shadow: 0 0 8px rgba(255, 0, 255, 0.5);
+      }
+
+      /* Responsive Design */
+      @media (min-width: 800px) {
+        .image-section {
+          display: block;
+        }
+      }
+
+      @media (max-width: 600px) {
+        .form-section {
+          padding: 40px 30px;
+        }
+        .form-header h3 {
+          font-size: 22px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Left Side Image -->
+      <div class="image-section">
+        <img
+          src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=1000&auto=format&fit=crop"
+          alt="Premium FoodRush Delivery"
+        />
+        <div class="image-overlay">
+          <h2>FOODRUSH</h2>
+          <p>
+            "Welcome back! Log in to track your current orders, claim exclusive offers, and satisfy your cravings fast."
+          </p>
+        </div>
+      </div>
+
+      <!-- Right Side Form -->
+      <div class="form-section">
+        <div class="form-header">
+          <h3>WELCOME BACK</h3>
+          <p>Log in to your account to continue.</p>
+        </div>
+
+        <form action="login" method="POST">
+          <div class="form-group">
+            <label for="userName">USER NAME</label>
+            <input
+              type="text"
+              id="userName"
+              name="userName"
+              required
+              placeholder="Enter your username"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="password">PASSWORD</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              required
+              placeholder="Enter your password"
+            />
+          </div>
+
+          <button type="submit" class="btn-submit">LOGIN</button>
+        </form>
+        
+        <div class="register-link">
+            Don't have an account? <a href="registration.html">Sign up here</a>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
