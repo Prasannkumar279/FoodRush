@@ -18,17 +18,17 @@ public class MenuDAOImpl implements MenuDAO{
 	private static final String INSERT_QUERY = "INSERT INTO menu(menuID,restaurantID,itemName,description,price,isAvailable,category)"
 			+ "VALUES (?,?,?,?,?,?,?)";
 	
-	private static final String GET_QUERY =  "SELECT * FROM Menu WHERE menuID = ?";
+	private static final String GET_QUERY =  "SELECT * FROM menu WHERE menuID = ?";
 	
-	private static final String GETALLMENU_QUERY = "SELECT * FROM Menu";
+	private static final String GETALLMENU_QUERY = "SELECT * FROM menu";
 	
-	private static final String UPDATE_QUERY = "UPDATE Menu SET restaurantID=?, itemName=?, description=?, price=?, isAvailable=?, category=?, updatedAt=? WHERE menuID=?";
+	private static final String UPDATE_QUERY = "UPDATE menu SET restaurantID=?, itemName=?, description=?, price=?, isAvailable=?, category=?, updatedAt=? WHERE menuID=?";
 	
 
-	private static final String DELETE_QUERY = "DELETE FROM Menu WHERE menuID=?";
+	private static final String DELETE_QUERY = "DELETE FROM menu WHERE menuID=?";
 	
 	private static final String GET_MENU_BY_RESTAURANT_QUERY =
-	        "SELECT * FROM Menu WHERE restaurantID = ?";
+	        "SELECT * FROM menu WHERE restaurantID = ?";
 
 	@Override
 	public void addMenu(Menu m) {
