@@ -12,7 +12,7 @@ public class DBConnection {
             System.getenv().getOrDefault("DB_PORT", "3306");
 
     private static final String DB_NAME =
-            System.getenv().getOrDefault("DB_NAME", "instantfood");
+            System.getenv().getOrDefault("DB_NAME", "instandfood");
 
     private static final String USERNAME =
             System.getenv().getOrDefault("DB_USERNAME", "root");
@@ -20,9 +20,14 @@ public class DBConnection {
     private static final String PASSWORD =
             System.getenv().getOrDefault("DB_PASSWORD", "root");
 
+//    private static final String URL =
+//            "jdbc:mysql://" + DB_HOST + ":" + DB_PORT + "/" + DB_NAME
+//            + "?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
+    
     private static final String URL =
             "jdbc:mysql://" + DB_HOST + ":" + DB_PORT + "/" + DB_NAME
-            + "?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
+            + "?sslMode=REQUIRED&serverTimezone=UTC";
+    
 
     public static Connection getConnection() {
 
