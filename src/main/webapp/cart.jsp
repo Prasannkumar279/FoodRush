@@ -572,6 +572,7 @@
 			    double deliveryFee = 40.00;
 			    double tax = grandTotal * 0.05;
 			    double finalTotal = grandTotal + deliveryFee + tax;
+			    session.setAttribute("finalTotal", finalTotal);
 			%>
 			
 							<!-- Add More Items Button -->
